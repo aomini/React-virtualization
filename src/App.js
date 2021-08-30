@@ -80,10 +80,6 @@ function App() {
     );
   };
 
-  React.useEffect(() => {
-    windowRef.current.scrollToRow(999);
-  }, []);
-
   return (
     <div className="App test">
       {/* <header className="App-header">
@@ -127,7 +123,7 @@ function App() {
                       overscanRowCount={1}
                       onScroll={onChildScroll}
                       scrollToAlignment="start"
-                      scrollToIndex={999}
+                      scrollToIndex={scrollIndex}
                     />
                   </div>
                 )}
