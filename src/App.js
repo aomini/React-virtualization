@@ -17,6 +17,19 @@ import "./App.css";
 const list = Array(1000)
   .fill()
   .map((val, index) => {
+    if (index === 999) {
+      return {
+        id: index,
+        name: "Rakesh shrestha from the top",
+        image: "http://via.placeholder.com/40",
+        text: loremIpsum({
+          count: 1,
+          units: "sentences",
+          sentenceLowerBound: 4,
+          sentenceUpperBound: 100,
+        }),
+      };
+    }
     return {
       id: index,
       name: "jon doe",
@@ -31,6 +44,7 @@ const list = Array(1000)
   });
 
 function App() {
+  const [scrollIndex, setScrollIndex] = React.useState(999);
   const [cache] = React.useState(() => {
     return new CellMeasurerCache({
       fixedWidth: true,
@@ -38,7 +52,13 @@ function App() {
     });
   });
 
-  const renderRow = ({ index, key, style, parent }) => {
+  // React.useEffect(() => {
+  //   setScrollIndex(999);
+  // }, []);
+
+  const windowRef = React.useRef(null);
+
+  const renderRow = ({ index, isScrolling, key, style, parent }) => {
     return (
       <CellMeasurer
         key={key}
@@ -60,9 +80,13 @@ function App() {
     );
   };
 
+  React.useEffect(() => {
+    windowRef.current.scrollToRow(999);
+  }, []);
+
   return (
-    <div className="App">
-      <header className="App-header">
+    <div className="App test">
+      {/* <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
         <p>
           Edit <code>src/App.js</code> and save to reload.
@@ -75,21 +99,40 @@ function App() {
         >
           Learn React
         </a>
-      </header>
+      </header> */}
       <div className="list">
-        <WindowScroller>
-          {({ width, height, scrollTop }) => (
-            <List
-              autoHeight
-              width={width}
-              height={height}
-              scrollTop={scrollTop}
-              deferredMeasurementCache={cache}
-              rowHeight={cache.rowHeight}
-              rowRenderer={renderRow}
-              rowCount={list.length}
-              overscanRowCount={1}
-            />
+        <WindowScroller onScroll={() => setScrollIndex(-1)}>
+          {({
+            height,
+            isScrolling,
+            registerChild,
+            onChildScroll,
+            scrollTop,
+          }) => (
+            <div className="WindowScrollWrapper">
+              <AutoSizer disableHeight>
+                {({ width }) => (
+                  <div ref={registerChild}>
+                    <List
+                      autoHeight
+                      ref={windowRef}
+                      width={width}
+                      isScrolling={isScrolling}
+                      height={height}
+                      scrollTop={scrollTop}
+                      deferredMeasurementCache={cache}
+                      rowHeight={cache.rowHeight}
+                      rowRenderer={renderRow}
+                      rowCount={list.length}
+                      overscanRowCount={1}
+                      onScroll={onChildScroll}
+                      scrollToAlignment="start"
+                      scrollToIndex={999}
+                    />
+                  </div>
+                )}
+              </AutoSizer>
+            </div>
           )}
         </WindowScroller>
       </div>
