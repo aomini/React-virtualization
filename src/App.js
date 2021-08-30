@@ -11,7 +11,6 @@ import {
   CellMeasurerCache,
   WindowScroller,
 } from "react-virtualized";
-import logo from "./logo.svg";
 import "./App.css";
 
 const list = Array(1000)
@@ -52,12 +51,6 @@ function App() {
     });
   });
 
-  // React.useEffect(() => {
-  //   setScrollIndex(999);
-  // }, []);
-
-  const windowRef = React.useRef(null);
-
   const renderRow = ({ index, isScrolling, key, style, parent }) => {
     return (
       <CellMeasurer
@@ -82,20 +75,6 @@ function App() {
 
   return (
     <div className="App test">
-      {/* <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header> */}
       <div className="list">
         <WindowScroller onScroll={() => setScrollIndex(-1)}>
           {({
@@ -111,7 +90,6 @@ function App() {
                   <div ref={registerChild}>
                     <List
                       autoHeight
-                      ref={windowRef}
                       width={width}
                       isScrolling={isScrolling}
                       height={height}
